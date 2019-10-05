@@ -1,5 +1,7 @@
 package library;
 
+import library.domain.entities.Book;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -46,10 +48,11 @@ public class LibraryResource {
                         StandardCharsets.UTF_8
                 )
         );
-        final List<String[]> books = new ArrayList<>();
+        final List<Book> books = new ArrayList<>();
         while (bufferedReader.ready()) {
             final String line = bufferedReader.readLine();
-            final String[] book = line.split(";");
+            final String[] bookData = line.split(";");
+            Book book = new Book(Integer.parseInt(bookData[0]), bookData[1], bookData[2], bookData[3], bookData[4]);
             books.add(book);
         }
 
@@ -60,11 +63,11 @@ public class LibraryResource {
 
         for (int i = 0; i < rentBooksRequests.size(); i++) {
             final String[] rental = rentBooksRequests.get(i).split(" ");
-            final String[] book = books.get(Integer.parseInt(rental[0]));
+            Book book = books.get(Integer.parseInt(rental[0]));
             double thisAmount = 0;
 
             int daysRented = Integer.parseInt(rental[1]);
-            String readingMode = book[3];
+            String readingMode = book.getReadingMode();
             switch (readingMode) {
                 case "IMAGE":
                     thisAmount += 2;
@@ -90,7 +93,7 @@ public class LibraryResource {
             }
 
             // create figures for this rental
-            result += "\t'" + book[1] + "' by '" + book[2] + "' for " + daysRented + " days: \t" + thisAmount + " $\n";
+            result += "\t'" + book.getTitle() + "' by '" + book.getAuthors() + "' for " + daysRented + " days: \t" + thisAmount + " $\n";
             totalAmount += thisAmount;
         }
 
