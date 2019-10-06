@@ -1,6 +1,7 @@
 package library;
 
 import library.adapters.file_persistence.FileBasedBookRepository;
+import library.adapters.rest.RestRentalRecordPresenter;
 import library.application.use_cases.rent_books.ports.RentBookRequest;
 import library.domain.entities.Book;
 import library.domain.values.Rental;
@@ -49,13 +50,10 @@ public class LibraryResource {
 
         RentalRecord rentalRecord = new RentalRecord(customer, rentals);
 
-        String result = "Rental Record for " + rentalRecord.getCustomerName() + "\n";
-        result += format(rentalRecord.getRentals());
-        // add footer lines
-        result += "You owe " + rentalRecord.getTotalAmount() + " $\n";
-        result += "You earned " + rentalRecord.getFrequentRenterPoints() + " frequent renter points\n";
+        RestRentalRecordPresenter rentalRecordPresenter = new RestRentalRecordPresenter();
+        rentalRecordPresenter.present(rentalRecord);
 
-        return List.of(result);
+        return rentalRecordPresenter.presentation();
     }
 
     private List<RentBookRequest> getRentBookRequests(List<String> rentBooksRequestData) {
@@ -79,15 +77,6 @@ public class LibraryResource {
             rentals.add(rental);
         }
         return rentals;
-    }
-
-    private String format(List<Rental> rentals) {
-        String result = "";
-        for (Rental rental : rentals) {
-            // create figures for this rental
-            result += "\t'" + rental.getBookTitle() + "' by '" + rental.getBookAuthors() + "' for " + rental.getDaysRented() + " days: \t" + rental.getAmount() + " $\n";
-        }
-        return result;
     }
 
 }
