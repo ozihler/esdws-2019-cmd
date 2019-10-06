@@ -4,8 +4,8 @@ import library.adapters.file_persistence.FileBasedBookRepository;
 import library.adapters.rest.RestRentalRecordPresenter;
 import library.application.use_cases.rent_books.ports.RentBookRequest;
 import library.domain.entities.Book;
-import library.use_case.rent_books.RentBooks;
-import library.use_case.rent_books.ports.RentBooksRequest;
+import library.use_cases.rent_books.RentBooks;
+import library.use_cases.rent_books.ports.RentBooksRequest;
 
 import java.io.IOException;
 import java.util.ArrayList;

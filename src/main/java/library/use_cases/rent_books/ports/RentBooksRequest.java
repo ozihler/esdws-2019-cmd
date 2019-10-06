@@ -1,4 +1,4 @@
-package library.use_case.rent_books.ports;
+package library.use_cases.rent_books.ports;
 
 import library.application.use_cases.rent_books.ports.RentBookRequest;
 
