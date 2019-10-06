@@ -16,14 +16,14 @@ import static org.junit.Assert.*;
 public class RentBooksTest {
     @Test
     public void testRentBooksExecuteWith() {
-        new RentBooks(Customer::new)
-                .executeWith(testInput(), this::assertResults);
+        new RentBooks(name -> new Customer(name))
+                .executeWith(testInput(), rentalRecord -> assertResults(rentalRecord));
     }
 
     private RentBooksInput testInput() {
         RentBookRequest rentBookRequest = new RentBookRequest(1, 5);
         RentBooksRequest rentBooksRequest = new RentBooksRequest("userX", List.of(rentBookRequest));
-        return new RentBooksInput(this::testBook, rentBooksRequest);
+        return new RentBooksInput(bookId -> testBook(bookId), rentBooksRequest);
     }
 
     private Book testBook(int bookId) {
@@ -48,5 +48,4 @@ public class RentBooksTest {
         assertEquals(testInput().getRentals().get(0).getDaysRented(), rentals.get(0).getDaysRented());
         assertEquals(testInput().getRentals().get(0).getAmount(), rentals.get(0).getAmount(), 0.001);
     }
-
 }
