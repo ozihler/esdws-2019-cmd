@@ -1,6 +1,7 @@
 package library.application.use_cases.rent_books;
 
 import library.application.outbound_ports.BookRepository;
+import library.application.outbound_ports.CustomerRepository;
 import library.application.use_cases.rent_books.ports.RentBookRequest;
 import library.application.use_cases.rent_books.ports.RentBooksInput;
 import library.application.use_cases.rent_books.ports.RentBooksRequest;
@@ -25,7 +26,7 @@ public class RentBooksTest {
                 "link"
         );
 
-        BookRepository books = new BookRepository() {
+        BookRepository booksRepository = new BookRepository() {
             @Override
             public List<Book> getAllBooks() {
                 return null;
@@ -41,7 +42,7 @@ public class RentBooksTest {
 
         RentBookRequest rentBookRequest = new RentBookRequest(1, 5);
         RentBooksRequest rentBooksRequest = new RentBooksRequest("userX", List.of(rentBookRequest));
-        RentBooksInput rentBooksInput = new RentBooksInput(books, rentBooksRequest);
+        RentBooksInput rentBooksInput = new RentBooksInput(booksRepository, rentBooksRequest);
 
         rentBooks.executeWith(
                 rentBooksInput,
