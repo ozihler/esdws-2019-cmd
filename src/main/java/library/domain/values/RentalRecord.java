@@ -4,6 +4,8 @@ import library.Customer;
 
 import java.util.List;
 
+import static java.util.stream.Collectors.toList;
+
 public class RentalRecord {
     private final Customer customer;
     private final List<Rental> rentals;
@@ -35,5 +37,14 @@ public class RentalRecord {
 
     public List<Rental> getRentals() {
         return rentals;
+    }
+
+    public RentalRecordDocument asDocument() {
+        return new RentalRecordDocument(
+                getCustomerName(),
+                getTotalAmount(),
+                getFrequentRenterPoints(),
+                getRentals().stream().map(Rental::asDocument).collect(toList())
+        );
     }
 }

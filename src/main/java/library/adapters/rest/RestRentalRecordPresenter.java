@@ -1,7 +1,7 @@
 package library.adapters.rest;
 
-import library.domain.values.Rental;
-import library.domain.values.RentalRecord;
+import library.domain.values.RentalDocument;
+import library.domain.values.RentalRecordDocument;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ public class RestRentalRecordPresenter {
         return restRentalRecord;
     }
 
-    public void present(RentalRecord rentalRecord) {
+    public void present(RentalRecordDocument rentalRecord) {
         String result = "Rental Record for " + rentalRecord.getCustomerName() + "\n";
         result += format(rentalRecord.getRentals());
         // add footer lines
@@ -23,9 +23,9 @@ public class RestRentalRecordPresenter {
         restRentalRecord = List.of(result);
     }
 
-    private String format(List<Rental> rentals) {
+    private String format(List<RentalDocument> rentals) {
         String result = "";
-        for (Rental rental : rentals) {
+        for (RentalDocument rental : rentals) {
             // create figures for this rental
             result += "\t'" + rental.getBookTitle() + "' by '" + rental.getBookAuthors() + "' for " + rental.getDaysRented() + " days: \t" + rental.getAmount() + " $\n";
         }

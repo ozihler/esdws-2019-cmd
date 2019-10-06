@@ -53,4 +53,13 @@ public class Rental {
         }
         return thisAmount;
     }
+
+    RentalDocument asDocument() {
+        return new RentalDocument(
+                getAmount(),
+                getDaysRented(),
+                getBookAuthors(),
+                getBookTitle()
+        );
+    }
 }
