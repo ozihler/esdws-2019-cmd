@@ -2,7 +2,7 @@ package library.application.use_cases.rent_books;
 
 import library.Customer;
 import library.InMemoryCustomerRepository;
-import library.adapters.rest.RestRentalRecordPresenter;
+import library.application.outbound_ports.presentation.RentalRecordPresenter;
 import library.application.use_cases.rent_books.ports.RentBooksInput;
 import library.domain.values.Rental;
 import library.domain.values.RentalRecord;
@@ -17,7 +17,7 @@ public class RentBooks {
         this.customerRepository = customerRepository;
     }
 
-    public void executeWith(RentBooksInput rentBooksInput, RestRentalRecordPresenter rentalRecordPresenter) {
+    public void executeWith(RentBooksInput rentBooksInput, RentalRecordPresenter rentalRecordPresenter) {
         Customer customer = this.customerRepository.findByUsername(rentBooksInput.getCustomerName());
         List<Rental> rentals = rentBooksInput.getRentals();
         RentalRecord rentalRecord = new RentalRecord(customer, rentals);

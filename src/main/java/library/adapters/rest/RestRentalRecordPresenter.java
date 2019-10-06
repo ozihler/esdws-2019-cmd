@@ -1,11 +1,12 @@
 package library.adapters.rest;
 
+import library.application.outbound_ports.presentation.RentalRecordPresenter;
 import library.domain.values.RentalDocument;
 import library.domain.values.RentalRecordDocument;
 
 import java.util.List;
 
-public class RestRentalRecordPresenter {
+public class RestRentalRecordPresenter implements RentalRecordPresenter {
 
     private List<String> restRentalRecord;
 
@@ -13,6 +14,7 @@ public class RestRentalRecordPresenter {
         return restRentalRecord;
     }
 
+    @Override
     public void present(RentalRecordDocument rentalRecord) {
         String result = "Rental Record for " + rentalRecord.getCustomerName() + "\n";
         result += format(rentalRecord.getRentals());
