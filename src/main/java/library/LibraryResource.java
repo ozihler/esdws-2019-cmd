@@ -1,6 +1,7 @@
 package library;
 
 import library.adapters.file_persistence.FileBasedBookRepository;
+import library.application.use_cases.rent_books.ports.RentBookRequest;
 import library.domain.entities.Book;
 import library.domain.values.Rental;
 
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LibraryResource {
-    private final FileBasedBookRepository bookRepository;
+    private FileBasedBookRepository bookRepository;
     private InMemoryCustomerRepository customerRepository;
 
     public LibraryResource() throws IOException {
@@ -31,26 +32,19 @@ public class LibraryResource {
         return books;
     }
 
-    public List<String> calculateFee(List<String> rentBooksRequests) {
-        if (rentBooksRequests == null || rentBooksRequests.size() == 0) {
+    public List<String> calculateFee(List<String> rentBooksRequestData) {
+        if (rentBooksRequestData == null || rentBooksRequestData.size() == 0) {
             throw new IllegalArgumentException("rent books requests cannot be null!");
         }
-        String customerName = rentBooksRequests.remove(0);
+        String customerName = rentBooksRequestData.remove(0);
 
         // fetch customer
         Customer customer = customerRepository.findByUsername(customerName);
 
         // calculate fee, frequent renter points, and document to display in front end
-        List<Rental> rentals = new ArrayList<>();
-        for (int i = 0; i < rentBooksRequests.size(); i++) {
-            final String[] rentalData = rentBooksRequests.get(i).split(" ");
-            int bookId = Integer.parseInt(rentalData[0]);
-            int daysRented = Integer.parseInt(rentalData[1]);
+        List<RentBookRequest> rentBookRequests = getRentBookRequests(rentBooksRequestData);
 
-            Book book = bookRepository.findById(bookId);
-            Rental rental = new Rental(book, daysRented);
-            rentals.add(rental);
-        }
+        List<Rental> rentals = getRentals(rentBookRequests);
 
         String result = "Rental Record for " + customer.getName() + "\n";
         result += format(rentals);
@@ -59,6 +53,29 @@ public class LibraryResource {
         result += "You earned " + getFrequentRenterPoints(rentals) + " frequent renter points\n";
 
         return List.of(result);
+    }
+
+    private List<RentBookRequest> getRentBookRequests(List<String> rentBooksRequestData) {
+        List<RentBookRequest> rentBookRequests = new ArrayList<>();
+        for (int i = 0; i < rentBooksRequestData.size(); i++) {
+            final String[] rentBookRequestData = rentBooksRequestData.get(i).split(" ");
+            RentBookRequest rentBookRequest = new RentBookRequest(
+                    Integer.parseInt(rentBookRequestData[0]),
+                    Integer.parseInt(rentBookRequestData[1])
+            );
+            rentBookRequests.add(rentBookRequest);
+        }
+        return rentBookRequests;
+    }
+
+    private List<Rental> getRentals(List<RentBookRequest> rentBookRequests) {
+        List<Rental> rentals = new ArrayList<>();
+        for (RentBookRequest rentBookRequest : rentBookRequests) {
+            Book book = bookRepository.findById(rentBookRequest.getBookId());
+            Rental rental = new Rental(book, rentBookRequest.getDaysRented());
+            rentals.add(rental);
+        }
+        return rentals;
     }
 
     private double getTotalAmount(List<Rental> rentals) {
