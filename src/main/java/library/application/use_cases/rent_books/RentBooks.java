@@ -1,4 +1,4 @@
-package library.use_cases.rent_books;
+package library.application.use_cases.rent_books;
 
 import library.Customer;
 import library.InMemoryCustomerRepository;
@@ -8,7 +8,7 @@ import library.application.use_cases.rent_books.ports.RentBookRequest;
 import library.domain.entities.Book;
 import library.domain.values.Rental;
 import library.domain.values.RentalRecord;
-import library.use_cases.rent_books.ports.RentBooksRequest;
+import library.application.use_cases.rent_books.ports.RentBooksRequest;
 
 import java.util.ArrayList;
 import java.util.List;
