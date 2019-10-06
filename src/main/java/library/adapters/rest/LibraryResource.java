@@ -49,7 +49,7 @@ public class LibraryResource {
 
         RestRentalRecordPresenter rentalRecordPresenter = new RestRentalRecordPresenter();
         IRentBooks iRentBooks = new RentBooks(customerRepository);
-        iRentBooks.executedWith(rentBooksInput, rentalRecordPresenter);
+        iRentBooks.executeWith(rentBooksInput, rentalRecordPresenter);
 
         return rentalRecordPresenter.presentation();
     }
