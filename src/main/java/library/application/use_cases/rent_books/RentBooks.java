@@ -19,7 +19,7 @@ public class RentBooks implements IRentBooks {
     }
 
     @Override
-    public void with(RentBooksInput rentBooksInput, RentalRecordPresenter rentalRecordPresenter) {
+    public void executedWith(RentBooksInput rentBooksInput, RentalRecordPresenter rentalRecordPresenter) {
         Customer customer = this.customerRepository.findByUsername(rentBooksInput.getCustomerName());
         List<Rental> rentals = rentBooksInput.getRentals();
         RentalRecord rentalRecord = new RentalRecord(customer, rentals);
