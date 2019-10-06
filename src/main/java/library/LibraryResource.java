@@ -4,6 +4,7 @@ import library.adapters.file_persistence.FileBasedBookRepository;
 import library.application.use_cases.rent_books.ports.RentBookRequest;
 import library.domain.entities.Book;
 import library.domain.values.Rental;
+import library.domain.values.RentalRecord;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -46,11 +47,13 @@ public class LibraryResource {
 
         List<Rental> rentals = getRentals(rentBookRequests);
 
-        String result = "Rental Record for " + customer.getName() + "\n";
-        result += format(rentals);
+        RentalRecord rentalRecord = new RentalRecord(customer, rentals);
+
+        String result = "Rental Record for " + rentalRecord.getCustomerName() + "\n";
+        result += format(rentalRecord.getRentals());
         // add footer lines
-        result += "You owe " + getTotalAmount(rentals) + " $\n";
-        result += "You earned " + getFrequentRenterPoints(rentals) + " frequent renter points\n";
+        result += "You owe " + rentalRecord.getTotalAmount() + " $\n";
+        result += "You earned " + rentalRecord.getFrequentRenterPoints() + " frequent renter points\n";
 
         return List.of(result);
     }
@@ -76,22 +79,6 @@ public class LibraryResource {
             rentals.add(rental);
         }
         return rentals;
-    }
-
-    private double getTotalAmount(List<Rental> rentals) {
-        double totalAmount = 0;
-        for (Rental rental : rentals) {
-            totalAmount += rental.getAmount();
-        }
-        return totalAmount;
-    }
-
-    private int getFrequentRenterPoints(List<Rental> rentals) {
-        int frequentRenterPoints = 0;
-        for (Rental rental : rentals) {
-            frequentRenterPoints += rental.getFrequentRenterPoints();
-        }
-        return frequentRenterPoints;
     }
 
     private String format(List<Rental> rentals) {
