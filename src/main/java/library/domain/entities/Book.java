@@ -5,14 +5,14 @@ public class Book {
     private final String title;
     private final String authors;
     private final String readingMode;
-    private final String link;
+    private final String thumbnailLink;
 
-    public Book(int id, String title, String authors, String readingMode, String link) {
+    public Book(int id, String title, String authors, String readingMode, String thumbnailLink) {
         this.id = id;
         this.title = title;
         this.authors = authors;
         this.readingMode = readingMode;
-        this.link = link;
+        this.thumbnailLink = thumbnailLink;
     }
 
     public int getId() {
@@ -31,7 +31,7 @@ public class Book {
         return readingMode;
     }
 
-    public String getLink() {
-        return link;
+    public String getThumbnailLink() {
+        return thumbnailLink;
     }
 }

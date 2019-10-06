@@ -1,39 +1,37 @@
 package library;
 
+import library.adapters.file_persistence.FileBasedBookRepository;
 import library.domain.entities.Book;
 import library.domain.values.Rental;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
 public class LibraryResource {
+    private final FileBasedBookRepository bookRepository;
     private InMemoryCustomerRepository customerRepository;
 
-    public LibraryResource() {
+    public LibraryResource() throws IOException {
         this.customerRepository = new InMemoryCustomerRepository();
+        this.bookRepository = new FileBasedBookRepository(getClass().getResourceAsStream("books.csv"));
     }
 
-    public List<String[]> getBooks() throws IOException {
-        final List<String[]> books = new ArrayList<>();
-        final BufferedReader bufferedReader = new BufferedReader(
-                new InputStreamReader(
-                        getClass().getResourceAsStream("books.csv"),
-                        StandardCharsets.UTF_8
-                )
-        );
-        while (bufferedReader.ready()) {
-            final String line = bufferedReader.readLine();
-            final String[] book = line.split(";");
-            books.add(book);
+    public List<String[]> getBooks() {
+        List<String[]> books = new ArrayList<>();
+        for (Book book : bookRepository.getAllBooks()) {
+            books.add(new String[]{
+                    String.valueOf(book.getId()),
+                    book.getTitle(),
+                    book.getAuthors(),
+                    book.getReadingMode(),
+                    book.getThumbnailLink()
+            });
         }
         return books;
     }
 
-    public List<String> calculateFee(List<String> rentBooksRequests) throws IOException {
+    public List<String> calculateFee(List<String> rentBooksRequests) {
         if (rentBooksRequests == null || rentBooksRequests.size() == 0) {
             throw new IllegalArgumentException("rent books requests cannot be null!");
         }
@@ -41,21 +39,6 @@ public class LibraryResource {
 
         // fetch customer
         Customer customer = customerRepository.findByUsername(customerName);
-
-        // fetch books
-        final BufferedReader bufferedReader = new BufferedReader(
-                new InputStreamReader(
-                        getClass().getResourceAsStream("books.csv"),
-                        StandardCharsets.UTF_8
-                )
-        );
-        List<Book> books = new ArrayList<>();
-        while (bufferedReader.ready()) {
-            final String line = bufferedReader.readLine();
-            final String[] bookData = line.split(";");
-            Book book = new Book(Integer.parseInt(bookData[0]), bookData[1], bookData[2], bookData[3], bookData[4]);
-            books.add(book);
-        }
 
         // calculate fee, frequent renter points, and document to display in front end
         double totalAmount = 0;
@@ -67,7 +50,8 @@ public class LibraryResource {
             int bookId = Integer.parseInt(rentalData[0]);
             int daysRented = Integer.parseInt(rentalData[1]);
 
-            Rental rental = new Rental(books.get(bookId), daysRented);
+            Book book = bookRepository.findById(bookId);
+            Rental rental = new Rental(book, daysRented);
 
             frequentRenterPoints += rental.getFrequentRenterPoints();
 
