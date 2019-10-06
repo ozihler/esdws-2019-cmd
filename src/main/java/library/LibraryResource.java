@@ -5,6 +5,7 @@ import library.adapters.rest.RestRentalRecordPresenter;
 import library.application.use_cases.rent_books.ports.RentBookRequest;
 import library.domain.entities.Book;
 import library.use_case.rent_books.RentBooks;
+import library.use_case.rent_books.ports.RentBooksRequest;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -38,14 +39,12 @@ public class LibraryResource {
             throw new IllegalArgumentException("rent books requests cannot be null!");
         }
         String customerName = rentBooksRequestData.remove(0);
-
-
-        // calculate fee, frequent renter points, and document to display in front end
         List<RentBookRequest> rentBookRequests = getRentBookRequests(rentBooksRequestData);
-        RestRentalRecordPresenter rentalRecordPresenter = new RestRentalRecordPresenter();
+        RentBooksRequest rentBooksRequest = new RentBooksRequest(customerName, rentBookRequests);
 
+        RestRentalRecordPresenter rentalRecordPresenter = new RestRentalRecordPresenter();
         RentBooks rentBooks = new RentBooks(customerRepository, bookRepository);
-        rentBooks.executeWith(customerName, rentBookRequests, rentalRecordPresenter);
+        rentBooks.executeWith(rentBooksRequest, rentalRecordPresenter);
 
         return rentalRecordPresenter.presentation();
     }

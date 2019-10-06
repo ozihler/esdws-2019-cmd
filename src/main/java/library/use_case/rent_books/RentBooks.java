@@ -8,6 +8,7 @@ import library.application.use_cases.rent_books.ports.RentBookRequest;
 import library.domain.entities.Book;
 import library.domain.values.Rental;
 import library.domain.values.RentalRecord;
+import library.use_case.rent_books.ports.RentBooksRequest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,9 +22,9 @@ public class RentBooks {
         this.bookRepository = bookRepository;
     }
 
-    public void executeWith(String customerName, List<RentBookRequest> rentBookRequests, RestRentalRecordPresenter rentalRecordPresenter) {
-        Customer customer = this.customerRepository.findByUsername(customerName);
-        List<Rental> rentals = getRentals(rentBookRequests);
+    public void executeWith(RentBooksRequest rentBooksRequest, RestRentalRecordPresenter rentalRecordPresenter) {
+        Customer customer = this.customerRepository.findByUsername(rentBooksRequest.getCustomerName());
+        List<Rental> rentals = getRentals(rentBooksRequest.getRentBookRequests());
         RentalRecord rentalRecord = new RentalRecord(customer, rentals);
         rentalRecordPresenter.present(rentalRecord);
     }
