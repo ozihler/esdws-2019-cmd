@@ -1,6 +1,6 @@
 package library.adapters.in_memory_persistence;
 
-import library.application.outbound_ports.CustomerRepository;
+import library.application.outbound_ports.persistence.CustomerRepository;
 import library.domain.entities.Customer;
 
 import java.util.Map;

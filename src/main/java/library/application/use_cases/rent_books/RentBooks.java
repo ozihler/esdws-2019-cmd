@@ -1,7 +1,7 @@
 package library.application.use_cases.rent_books;
 
 import library.domain.entities.Customer;
-import library.application.outbound_ports.CustomerRepository;
+import library.application.outbound_ports.persistence.CustomerRepository;
 import library.application.outbound_ports.presentation.RentalRecordPresenter;
 import library.application.use_cases.rent_books.ports.IRentBooks;
 import library.application.use_cases.rent_books.ports.RentBooksInput;

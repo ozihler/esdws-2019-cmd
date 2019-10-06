@@ -1,4 +1,4 @@
-package library.application.outbound_ports;
+package library.application.outbound_ports.persistence;
 
 import library.domain.entities.Customer;
 

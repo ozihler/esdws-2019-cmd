@@ -1,6 +1,6 @@
 package library.application.use_cases.rent_books.ports;
 
-import library.application.outbound_ports.BookRepository;
+import library.application.outbound_ports.persistence.IFindSingleBooks;
 import library.domain.entities.Book;
 import library.domain.values.Rental;
 
@@ -9,11 +9,11 @@ import java.util.List;
 
 public class RentBooksInput {
     private final RentBooksRequest rentBooksRequest;
-    private BookRepository bookRepository;
+    private IFindSingleBooks IFindSingleBooks;
 
-    public RentBooksInput(BookRepository bookRepository, RentBooksRequest rentBooksRequest) {
+    public RentBooksInput(IFindSingleBooks IFindSingleBooks, RentBooksRequest rentBooksRequest) {
         this.rentBooksRequest = rentBooksRequest;
-        this.bookRepository = bookRepository;
+        this.IFindSingleBooks = IFindSingleBooks;
     }
 
     public String getCustomerName() {
@@ -23,7 +23,7 @@ public class RentBooksInput {
     public List<Rental> getRentals() {
         List<Rental> rentals = new ArrayList<>();
         for (RentBookRequest rentBookRequest : rentBooksRequest.getRentBookRequests()) {
-            Book book = this.bookRepository.findById(rentBookRequest.getBookId());
+            Book book = this.IFindSingleBooks.byId(rentBookRequest.getBookId());
             Rental rental = new Rental(book, rentBookRequest.getDaysRented());
             rentals.add(rental);
         }

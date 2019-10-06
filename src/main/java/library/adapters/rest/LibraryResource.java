@@ -2,8 +2,9 @@ package library.adapters.rest;
 
 import library.adapters.in_memory_persistence.InMemoryCustomerRepository;
 import library.adapters.file_persistence.FileBasedBookRepository;
-import library.application.outbound_ports.BookRepository;
-import library.application.outbound_ports.CustomerRepository;
+import library.application.outbound_ports.persistence.IFindSingleBooks;
+import library.application.outbound_ports.persistence.CustomerRepository;
+import library.application.outbound_ports.persistence.IRetrieveAllBooks;
 import library.application.use_cases.rent_books.ports.IRentBooks;
 import library.application.use_cases.rent_books.ports.RentBookRequest;
 import library.application.use_cases.rent_books.ports.RentBooksInput;
@@ -16,17 +17,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LibraryResource {
-    private BookRepository bookRepository;
+    private IFindSingleBooks IFindSingleBooks;
+    private IRetrieveAllBooks iRetrieveAllBooks;
     private CustomerRepository customerRepository;
 
     public LibraryResource() throws IOException {
         this.customerRepository = new InMemoryCustomerRepository();
-        this.bookRepository = new FileBasedBookRepository(getClass().getResourceAsStream("books.csv"));
+        FileBasedBookRepository bookRepository = new FileBasedBookRepository(getClass().getResourceAsStream("books.csv"));
+        this.IFindSingleBooks = bookRepository;
+        iRetrieveAllBooks = bookRepository;
     }
 
     public List<String[]> getBooks() {
         List<String[]> books = new ArrayList<>();
-        for (Book book : bookRepository.getAllBooks()) {
+        for (Book book : iRetrieveAllBooks.get()) {
             books.add(new String[]{
                     String.valueOf(book.getId()),
                     book.getTitle(),
@@ -45,7 +49,7 @@ public class LibraryResource {
         String customerName = rentBooksRequestData.remove(0);
         List<RentBookRequest> rentBookRequests = getRentBookRequests(rentBooksRequestData);
         RentBooksRequest rentBooksRequest = new RentBooksRequest(customerName, rentBookRequests);
-        RentBooksInput rentBooksInput = new RentBooksInput(bookRepository, rentBooksRequest);
+        RentBooksInput rentBooksInput = new RentBooksInput(IFindSingleBooks, rentBooksRequest);
 
         RestRentalRecordPresenter rentalRecordPresenter = new RestRentalRecordPresenter();
         IRentBooks iRentBooks = new RentBooks(customerRepository);
