@@ -2,6 +2,7 @@ package library;
 
 import library.adapters.file_persistence.FileBasedBookRepository;
 import library.adapters.rest.RestRentalRecordPresenter;
+import library.application.outbound_ports.CustomerRepository;
 import library.application.use_cases.rent_books.ports.IRentBooks;
 import library.application.use_cases.rent_books.ports.RentBookRequest;
 import library.application.use_cases.rent_books.ports.RentBooksInput;
@@ -15,7 +16,7 @@ import java.util.List;
 
 public class LibraryResource {
     private FileBasedBookRepository bookRepository;
-    private InMemoryCustomerRepository customerRepository;
+    private CustomerRepository customerRepository;
 
     public LibraryResource() throws IOException {
         this.customerRepository = new InMemoryCustomerRepository();
@@ -50,7 +51,6 @@ public class LibraryResource {
         iRentBooks.executedWith(rentBooksInput, rentalRecordPresenter);
 
         return rentalRecordPresenter.presentation();
-
     }
 
     private List<RentBookRequest> getRentBookRequests(List<String> rentBooksRequestData) {

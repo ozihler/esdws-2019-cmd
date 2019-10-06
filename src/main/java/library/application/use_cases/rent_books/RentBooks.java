@@ -1,7 +1,7 @@
 package library.application.use_cases.rent_books;
 
 import library.Customer;
-import library.InMemoryCustomerRepository;
+import library.application.outbound_ports.CustomerRepository;
 import library.application.outbound_ports.presentation.RentalRecordPresenter;
 import library.application.use_cases.rent_books.ports.IRentBooks;
 import library.application.use_cases.rent_books.ports.RentBooksInput;
@@ -12,9 +12,9 @@ import library.domain.values.RentalRecordDocument;
 import java.util.List;
 
 public class RentBooks implements IRentBooks {
-    private final InMemoryCustomerRepository customerRepository;
+    private final CustomerRepository customerRepository;
 
-    public RentBooks(InMemoryCustomerRepository customerRepository) {
+    public RentBooks(CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
     }
 
