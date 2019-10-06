@@ -3,6 +3,7 @@ package library;
 import library.adapters.file_persistence.FileBasedBookRepository;
 import library.adapters.rest.RestRentalRecordPresenter;
 import library.application.use_cases.rent_books.ports.RentBookRequest;
+import library.application.use_cases.rent_books.ports.RentBooksInput;
 import library.domain.entities.Book;
 import library.application.use_cases.rent_books.RentBooks;
 import library.application.use_cases.rent_books.ports.RentBooksRequest;
@@ -41,10 +42,11 @@ public class LibraryResource {
         String customerName = rentBooksRequestData.remove(0);
         List<RentBookRequest> rentBookRequests = getRentBookRequests(rentBooksRequestData);
         RentBooksRequest rentBooksRequest = new RentBooksRequest(customerName, rentBookRequests);
+        RentBooksInput rentBooksInput = new RentBooksInput(bookRepository, rentBooksRequest);
 
         RestRentalRecordPresenter rentalRecordPresenter = new RestRentalRecordPresenter();
-        RentBooks rentBooks = new RentBooks(customerRepository, bookRepository);
-        rentBooks.executeWith(rentBooksRequest, rentalRecordPresenter);
+        RentBooks rentBooks = new RentBooks(customerRepository);
+        rentBooks.executeWith(rentBooksInput, rentalRecordPresenter);
 
         return rentalRecordPresenter.presentation();
 
