@@ -4,8 +4,7 @@ import library.adapters.file_persistence.FileBasedBookRepository;
 import library.adapters.rest.RestRentalRecordPresenter;
 import library.application.use_cases.rent_books.ports.RentBookRequest;
 import library.domain.entities.Book;
-import library.domain.values.Rental;
-import library.domain.values.RentalRecord;
+import library.use_case.rent_books.RentBooks;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -40,18 +39,13 @@ public class LibraryResource {
         }
         String customerName = rentBooksRequestData.remove(0);
 
-        // fetch customer
-        Customer customer = customerRepository.findByUsername(customerName);
 
         // calculate fee, frequent renter points, and document to display in front end
         List<RentBookRequest> rentBookRequests = getRentBookRequests(rentBooksRequestData);
-
-        List<Rental> rentals = getRentals(rentBookRequests);
-
-        RentalRecord rentalRecord = new RentalRecord(customer, rentals);
-
         RestRentalRecordPresenter rentalRecordPresenter = new RestRentalRecordPresenter();
-        rentalRecordPresenter.present(rentalRecord);
+
+        RentBooks rentBooks = new RentBooks(customerRepository, bookRepository);
+        rentBooks.executeWith(customerName, rentBookRequests, rentalRecordPresenter);
 
         return rentalRecordPresenter.presentation();
     }
@@ -67,16 +61,6 @@ public class LibraryResource {
             rentBookRequests.add(rentBookRequest);
         }
         return rentBookRequests;
-    }
-
-    private List<Rental> getRentals(List<RentBookRequest> rentBookRequests) {
-        List<Rental> rentals = new ArrayList<>();
-        for (RentBookRequest rentBookRequest : rentBookRequests) {
-            Book book = bookRepository.findById(rentBookRequest.getBookId());
-            Rental rental = new Rental(book, rentBookRequest.getDaysRented());
-            rentals.add(rental);
-        }
-        return rentals;
     }
 
 }
