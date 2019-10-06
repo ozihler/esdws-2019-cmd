@@ -1,6 +1,6 @@
 package library.application.use_cases.rent_books.ports;
 
-import library.adapters.file_persistence.FileBasedBookRepository;
+import library.application.outbound_ports.BookRepository;
 import library.domain.entities.Book;
 import library.domain.values.Rental;
 
@@ -9,9 +9,9 @@ import java.util.List;
 
 public class RentBooksInput {
     private final RentBooksRequest rentBooksRequest;
-    private FileBasedBookRepository bookRepository;
+    private BookRepository bookRepository;
 
-    public RentBooksInput(FileBasedBookRepository bookRepository, RentBooksRequest rentBooksRequest) {
+    public RentBooksInput(BookRepository bookRepository, RentBooksRequest rentBooksRequest) {
         this.rentBooksRequest = rentBooksRequest;
         this.bookRepository = bookRepository;
     }

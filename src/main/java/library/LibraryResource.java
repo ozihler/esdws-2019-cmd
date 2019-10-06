@@ -2,6 +2,7 @@ package library;
 
 import library.adapters.file_persistence.FileBasedBookRepository;
 import library.adapters.rest.RestRentalRecordPresenter;
+import library.application.outbound_ports.BookRepository;
 import library.application.outbound_ports.CustomerRepository;
 import library.application.use_cases.rent_books.ports.IRentBooks;
 import library.application.use_cases.rent_books.ports.RentBookRequest;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LibraryResource {
-    private FileBasedBookRepository bookRepository;
+    private BookRepository bookRepository;
     private CustomerRepository customerRepository;
 
     public LibraryResource() throws IOException {

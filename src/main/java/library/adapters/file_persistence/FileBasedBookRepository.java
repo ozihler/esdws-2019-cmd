@@ -1,5 +1,6 @@
 package library.adapters.file_persistence;
 
+import library.application.outbound_ports.BookRepository;
 import library.domain.entities.Book;
 
 import java.io.BufferedReader;
@@ -10,7 +11,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileBasedBookRepository {
+public class FileBasedBookRepository implements BookRepository {
 
     private final List<Book> books;
 
@@ -31,10 +32,12 @@ public class FileBasedBookRepository {
         }
     }
 
+    @Override
     public List<Book> getAllBooks() {
         return books;
     }
 
+    @Override
     public Book findById(int bookId) {
         return books.get(bookId);
     }
