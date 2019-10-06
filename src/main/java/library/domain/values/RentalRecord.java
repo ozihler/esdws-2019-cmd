@@ -1,6 +1,6 @@
 package library.domain.values;
 
-import library.Customer;
+import library.domain.entities.Customer;
 
 import java.util.List;
 

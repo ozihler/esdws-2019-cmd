@@ -1,7 +1,7 @@
-package library;
+package library.adapters.rest;
 
+import library.adapters.in_memory_persistence.InMemoryCustomerRepository;
 import library.adapters.file_persistence.FileBasedBookRepository;
-import library.adapters.rest.RestRentalRecordPresenter;
 import library.application.outbound_ports.BookRepository;
 import library.application.outbound_ports.CustomerRepository;
 import library.application.use_cases.rent_books.ports.IRentBooks;

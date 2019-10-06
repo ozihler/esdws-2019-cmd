@@ -1,4 +1,4 @@
-package library;
+package library.domain.entities;
 
 public class Customer {
     private String name;

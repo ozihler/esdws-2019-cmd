@@ -1,5 +1,6 @@
 package library;
 
+import library.adapters.rest.LibraryResource;
 import org.junit.Test;
 
 import java.io.IOException;
